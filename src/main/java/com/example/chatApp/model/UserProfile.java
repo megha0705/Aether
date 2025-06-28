@@ -13,7 +13,7 @@ public class UserProfile {
     private String userId;
     private String userName;
     private String profilePic;
-    private List<RoomServiceModel> roomsParticipated;
+    private List<String> roomsIdParticipated;
 
     public String getId() {
         return id;
@@ -47,11 +47,11 @@ public class UserProfile {
         this.profilePic = profilePic;
     }
 
-    public int getRoomsParticipated() {
-        return roomsParticipated;
+    public List<String> getRoomsIdParticipated() {
+        return roomsIdParticipated;
     }
 
-    public void setRoomsParticipated(int roomsParticipated) {
-        this.roomsParticipated = roomsParticipated;
+    public void setRoomsIdParticipated(List<String> roomsIdParticipated) {
+        this.roomsIdParticipated = roomsIdParticipated;
     }
 }

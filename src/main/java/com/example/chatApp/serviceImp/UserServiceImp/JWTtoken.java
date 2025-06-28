@@ -19,8 +19,8 @@ import java.util.function.Function;
 
 @Service
 public class JWTtoken {
-    private String secretKey = "";
-    public JWTtoken(){
+    private String secretKey = "m2VkjT9Xq8fLOtdH7UvPzbdhtka8Bc1Zh2+0N3JdJcc=";
+  /*  public JWTtoken(){
         try{
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk =  keyGenerator.generateKey();
@@ -29,7 +29,7 @@ public class JWTtoken {
             throw new RuntimeException(e);
         }
 
-    }
+    }*/
     public String generateToken(String userName) {
         Map<String , Object> claims = new HashMap<>();
         return Jwts.builder()
@@ -37,7 +37,7 @@ public class JWTtoken {
                 .add(claims)
                 .subject(userName)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 *60 *30))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .and()
                 .signWith(getKey())
                 .compact();

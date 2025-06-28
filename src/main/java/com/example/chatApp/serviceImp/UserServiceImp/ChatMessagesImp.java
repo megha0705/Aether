@@ -16,7 +16,7 @@ public class ChatMessagesImp implements ChatMessageService {
     public void saveChatMesaages(ChatMessage message) {
         ChatMessage messages = new ChatMessage();
         messages.setContent(message.getContent());
-        messages.setSender(message.getSender());
+        messages.setUserId(message.getUserId());
         messages.setRoomId(message.getRoomId());
         messages.setTimestamp(LocalDateTime.now());
         chatMesaageRepo.save(message);

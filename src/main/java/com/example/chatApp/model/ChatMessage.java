@@ -1,21 +1,22 @@
 package com.example.chatApp.model;
 
+import org.apache.catalina.User;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 @Document
 public class ChatMessage {
     private String roomId;
-    private String sender;
+    private String userId;
     private String content;
     private LocalDateTime timestamp;
 
-    public String getSender() {
-        return sender;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setUserId(String UserId) {
+        this.userId = UserId;
     }
 
     public String getContent() {

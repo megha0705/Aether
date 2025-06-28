@@ -15,11 +15,12 @@ public class UserAuthController {
     @PostMapping("/register")
     public void register(@RequestParam String userName , @RequestParam String password){
     userService.register(userName , password);
+        userProfileServiceImp.createUserProfile(userName);
     }
     @PostMapping("/login")
     public String login(@RequestParam String userName , @RequestParam String password){
        String jsonToken =  userService.verify(userName , password);
-         userProfileServiceImp.createUserProfile(userName);
+
          return jsonToken;
     }
     @GetMapping("/hi")
