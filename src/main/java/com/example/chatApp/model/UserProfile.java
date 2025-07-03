@@ -3,6 +3,7 @@ package com.example.chatApp.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -13,7 +14,7 @@ public class UserProfile {
     private String userId;
     private String userName;
     private String profilePic;
-    private List<String> roomsIdParticipated;
+    private List<String> roomsIdParticipated = new ArrayList<>();;
 
     public String getId() {
         return id;

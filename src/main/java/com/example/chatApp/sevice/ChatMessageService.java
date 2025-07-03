@@ -6,4 +6,7 @@ public interface ChatMessageService {
     public void saveChatMesaages(ChatMessage message);
 
 
+    void updateDeliveredTo(String userName , String msgId);
+
+    void updateSeenBy(String userName, String msgId);
 }

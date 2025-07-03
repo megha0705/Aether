@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document
@@ -12,7 +13,7 @@ public class RoomServiceModel {
     private String id;
     private String roomId;
     private String roomName;
-    private List<String> participantsId;
+    private List<String> participantsId = new ArrayList<>();;
     private LocalDate createdAt;
 
     public String getRoomId() {

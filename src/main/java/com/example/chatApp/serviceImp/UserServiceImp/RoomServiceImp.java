@@ -31,13 +31,26 @@ if(roomServiceRepo.findById(roomId).isPresent()){
     }
 
     @Override
-    public void addParticipantId(String userId, String roomId) {
-        RoomServiceModel room = roomServiceRepo.findById(roomId).orElseThrow(()-> new RuntimeException("room with that id is not found"));
-        if(!room.getParticipantsId().contains(userId)){
-            room.getParticipantsId().add(userId);
+    public void addParticipantId(String userName, String roomId) {
+       // RoomServiceModel room = roomServiceRepo.findById(roomId).orElseThrow(()-> new RuntimeException("room with that id is not found"));
+        RoomServiceModel room = roomServiceRepo.findByroomId(roomId);
+        if(!room.getParticipantsId().contains(userName)){
+            room.getParticipantsId().add(userName);
             roomServiceRepo.save(room);
         }else{
             System.out.println("user is already part oof that room");
+        }
+    }
+
+    @Override
+    public void leaveRoom(String userName, String roomId) {
+        RoomServiceModel room = roomServiceRepo.findByroomId(roomId);
+       // RoomServiceModel room = roomServiceRepo.findById(roomId).orElseThrow(()-> new RuntimeException("room with that id is not found"));
+        if(room.getParticipantsId().contains(userName)){
+            room.getParticipantsId().remove(userName);
+            roomServiceRepo.save(room);
+        }else{
+            System.out.println("user with that id does not exist");
         }
     }
 }

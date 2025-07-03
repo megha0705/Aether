@@ -20,10 +20,11 @@ public class UserAuth implements UserService {
     @Autowired
     UserRepo userRepo;
     @Override
-    public void register(String userName, String password) {
+    public void register(String userName,String email, String password) {
         UserModel user = new UserModel();
         user.setPassword(encode.encode(password));
         user.setUsername(userName);
+        user.setEmail(email);
         userRepo.save(user);
     }
 

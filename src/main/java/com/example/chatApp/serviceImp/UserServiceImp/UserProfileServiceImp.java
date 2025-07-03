@@ -18,9 +18,10 @@ import java.util.Map;
 @Service
 public class UserProfileServiceImp {
     @Autowired
-    UserProfileRepo userProfileRepo;
-    @Autowired
     UserRepo userRepo;
+    @Autowired
+    UserProfileRepo userProfileRepo;
+
     @Autowired
     Cloudinary cloudinary;
     public void createUserProfile(String userName) {
@@ -28,12 +29,14 @@ public class UserProfileServiceImp {
         UserModel user = userRepo.findByUsername(userName);
         profile.setUserId(user.getId());
         profile.setUserName(userName);
+        profile.setProfilePic("http://res.cloudinary.com/dolx1bzdi/image/upload/v1751210834/aether/profile_pics/fw4vw1o1qwutuq6nwrgn.jpg");
         userProfileRepo.save(profile);
 
     }
 
-    public void addRoomService(String userId, String roomId) {
-        UserProfile user = userProfileRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found"));
+    public void addRoomService(String userName, String roomId) {
+       UserProfile user  =  userProfileRepo.findByUserName(userName);
+      //  UserProfile user = userProfileRepo.findById(user).orElseThrow(() -> new RuntimeException("user not found"));
         if (!user.getRoomsIdParticipated().contains(roomId)) {
             user.getRoomsIdParticipated().add(roomId);
             userProfileRepo.save(user);
@@ -42,7 +45,7 @@ public class UserProfileServiceImp {
         }
     }
 
-    public String editUserProfilePic(MultipartFile profilePic , String userId) throws IOException{
+    public String editUserProfilePic(MultipartFile profilePic , String userName) throws IOException{
 
 
 
@@ -54,10 +57,21 @@ public class UserProfileServiceImp {
                 String imgUrl = uploadResult.get("url").toString();
 
 
-                UserProfile user = userProfileRepo.findById(userId).orElseThrow(()->  new RuntimeException("user with this" + userId + "is not found"));
+                UserProfile user = userProfileRepo.findByUserName(userName);
                 user.setProfilePic(imgUrl);
                 userProfileRepo.save(user);
 
                 return imgUrl;
+    }
+
+    public void removeParticipantId(String userName, String roomId) {
+        UserProfile user = userProfileRepo.findByUserName(userName);
+       // UserProfile user = userProfileRepo.findById(userId).orElseThrow(() -> new RuntimeException("user not found"));
+        if(user.getRoomsIdParticipated().contains(roomId)){
+            user.getRoomsIdParticipated().remove(roomId);
+        }else{
+            System.out.println("user is not part of that room");
+        }
+
     }
 }

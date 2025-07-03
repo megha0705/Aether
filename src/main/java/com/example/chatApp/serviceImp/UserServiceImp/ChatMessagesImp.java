@@ -21,4 +21,24 @@ public class ChatMessagesImp implements ChatMessageService {
         messages.setTimestamp(LocalDateTime.now());
         chatMesaageRepo.save(message);
     }
+
+    @Override
+    public void updateDeliveredTo(String userName , String msgId) {
+        ChatMessage message = chatMesaageRepo.findById(msgId).orElseThrow(()-> new RuntimeException("msg wwith that id does not exist"));
+        if(!message.getMsgDelivered().contains(userName)){
+            message.getMsgDelivered().add(userName);
+        }else{
+            System.out.println("username is already saved");
+        }
+    }
+
+    @Override
+    public void updateSeenBy(String userName, String msgId) {
+        ChatMessage message = chatMesaageRepo.findById(msgId).orElseThrow(()-> new RuntimeException("msg wwith that id does not exist"));
+        if(!message.getMsgSeen().contains(userName)){
+            message.getMsgSeen().add(userName);
+        }else{
+            System.out.println("user has already seen the msg do not save it");
+        }
+    }
 }

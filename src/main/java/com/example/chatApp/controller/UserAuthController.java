@@ -13,18 +13,17 @@ public class UserAuthController {
     @Autowired
     UserService userService;
     @PostMapping("/register")
-    public void register(@RequestParam String userName , @RequestParam String password){
-    userService.register(userName , password);
+    public void register(@RequestParam String userName , @RequestParam String email , @RequestParam String password){
+    userService.register(userName ,email, password);
         userProfileServiceImp.createUserProfile(userName);
     }
     @PostMapping("/login")
     public String login(@RequestParam String userName , @RequestParam String password){
        String jsonToken =  userService.verify(userName , password);
-
          return jsonToken;
     }
-    @GetMapping("/hi")
+   /* @GetMapping("/hi")
     public String hi(){
         return " you have succesfully implemented the jwt validation";
-    }
+    }*/
 }
