@@ -5,6 +5,7 @@ import com.example.chatApp.dto.TypingStatus;
 import com.example.chatApp.model.ChatMessage;
 import com.example.chatApp.repository.RoomServiceRepo;
 import com.example.chatApp.serviceImp.UserServiceImp.ChatMessagesImp;
+import com.example.chatApp.serviceImp.UserServiceImp.MessageServiceImp;
 import com.example.chatApp.serviceImp.UserServiceImp.UserProfileServiceImp;
 import com.example.chatApp.sevice.ChatMessageService;
 import com.example.chatApp.sevice.RoomService;
@@ -23,6 +24,8 @@ public class ChatController {
 
     @Autowired
     RoomService roomService;
+    @Autowired
+    MessageServiceImp messageServiceImp;
     private final SimpMessagingTemplate messagingTemplate;
 
     public ChatController(SimpMessagingTemplate messagingTemplate) {
@@ -31,12 +34,13 @@ public class ChatController {
 
     @MessageMapping("/message") // Client sends here
    // @SendTo("/topic/messages") // Broadcast to subscribers
-    public ChatMessage send(ChatMessage message) {
+    public ChatMessage send(ChatMessage message , Principal principal) {
         System.out.println("🔥 Received from frontend: " + message.getContent() + " for room " + message.getRoomId());
 
         String destination = "/topic/room/" + message.getRoomId();
         messagingTemplate.convertAndSend(destination, message);
        chatMessageService.saveChatMesaages(message);
+       messageServiceImp.sendNotifications(principal.getName() , message.getRoomId());
 
         return message;
     }
