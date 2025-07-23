@@ -32,7 +32,7 @@ public class AuthChanelIntercepetor implements ChannelInterceptor {
             String userName = jwTtoken.extractUserName(token);
 
             // Store your authenticated user ID
-            Principal principal = () -> userName
+            Principal principal = () -> userName;
             accessor.setUser(principal);
         }
 

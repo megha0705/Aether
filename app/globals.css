@@ -1,0 +1,83 @@
+/* Import Bootstrap */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+
+/* Custom Theme */
+body {
+  background-color: #121212;
+  color: #f8f9fa;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+a {
+  color: crimson;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #ff4d4d;
+}
+
+.btn-primary {
+  background-color: crimson;
+  border-color: crimson;
+}
+
+.btn-primary:hover {
+  background-color: #a60000;
+  border-color: #a60000;
+}
+
+.bg-dark-custom {
+  background-color: #1e1e1e;
+}
+
+.text-crimson {
+  color: crimson;
+}
+
+.border-crimson {
+  border-color: crimson !important;
+}
+
+.bg-dark-custom {
+  background-color: #1e1e1e;
+}
+
+.text-crimson {
+  color: crimson;
+}
+
+.border-crimson {
+  border-color: crimson !important;
+}
+
+.form-control:focus {
+  border-color: crimson;
+  box-shadow: 0 0 0 0.2rem rgba(220, 20, 60, 0.25);
+}
+
+.bg-dark-custom {
+  background-color: #1e1e1e;
+}
+
+.text-crimson {
+  color: crimson;
+}
+
+.border-crimson {
+  border-color: crimson !important;
+}
+
+.dropdown-menu.bg-dark-custom {
+  background-color: #1e1e1e !important;
+}
+
+.dropdown-item.text-white:hover,
+.dropdown-item.text-danger:hover {
+  background-color: crimson !important;
+  color: white !important;
+}
