@@ -25,7 +25,9 @@ export default function JoinRoomPage() {
           Authorization: `Bearer ${token}`,
         },
       });
-      router.push(`/dashboard/chat/${roomId}`);
+
+      // Redirect to dashboard instead of chat page
+      router.push('/dashboard');
     } catch (err) {
       setError('Failed to join room.');
     }

@@ -7,25 +7,45 @@ import { useRouter } from 'next/navigation';
 
 export default function Sidebar({ onRoomSelect }) {
   const [rooms, setRooms] = useState([]);
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        const res = await axios.get('http://localhost:8080/getAllRoom', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setRooms(res.data); // Filter this if needed
-      } catch (err) {
-        console.error('Error fetching rooms');
-      }
-    };
     fetchRooms();
   }, [token]);
 
+  const fetchRooms = async () => {
+    try {
+      const res = await axios.get('http://localhost:8080/getAllRoom', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // ✅ Filter rooms created by current user
+      const filtered = res.data.filter((room) => {
+        return room.createdBy === user?.username;
+      });
+
+      setRooms(filtered);
+    } catch (err) {
+      console.error('Error fetching rooms:', err);
+    }
+  };
+
   const handleCreate = () => router.push('/create-room');
   const handleJoin = () => router.push('/join-room');
+
+  const handleDeleteRoom = async (roomId) => {
+    if (!window.confirm('Are you sure you want to delete this room?')) return;
+
+    try {
+      await axios.delete(`http://localhost:8080/deleteRoom/${roomId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setRooms((prev) => prev.filter((room) => room.roomId !== roomId));
+    } catch (err) {
+      console.error('Error deleting room:', err);
+    }
+  };
 
   return (
     <div className="p-3 bg-black text-white h-100" style={{ width: '250px' }}>
@@ -41,11 +61,19 @@ export default function Sidebar({ onRoomSelect }) {
         {rooms.map((room) => (
           <li
             key={room.roomId}
-            className="list-group-item bg-dark-custom text-white border-crimson mb-1"
+            className="list-group-item bg-dark-custom text-white border-crimson mb-1 d-flex justify-content-between align-items-center"
             style={{ cursor: 'pointer' }}
-            onClick={() => onRoomSelect(room.roomId)}
           >
-            {room.roomName}
+            <span onClick={() => onRoomSelect(room.roomId)}>{room.roomName}</span>
+            <button
+              className="btn btn-sm btn-light ms-2"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteRoom(room.roomId);
+              }}
+            >
+              ❌
+            </button>
           </li>
         ))}
       </ul>

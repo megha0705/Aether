@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Stomp } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
-import ParticipantsList from './ParticipantsList'; // Make sure this component exists
+import { useEffect, useRef, useState } from "react";
+import { Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+// import ParticipantsList from './ParticipantsList'; // Make sure this component exists
 
 export default function ChatBox({ roomId, token }) {
   const [messages, setMessages] = useState([]);
   const stompClientRef = useRef(null);
-  const [newMsg, setNewMsg] = useState('');
+  const [newMsg, setNewMsg] = useState("");
 
   useEffect(() => {
-    const socket = new SockJS('http://localhost:8080/ws');
+    const socket = new SockJS("http://localhost:8080/ws");
     const client = Stomp.over(socket);
 
     client.debug = () => {}; // Disable verbose logs
@@ -27,7 +27,7 @@ export default function ChatBox({ roomId, token }) {
         });
       },
       (error) => {
-        console.error('STOMP connection error:', error);
+        console.error("STOMP connection error:", error);
       }
     );
 
@@ -42,24 +42,29 @@ export default function ChatBox({ roomId, token }) {
   }, [roomId, token]);
 
   const sendMessage = () => {
-    if (stompClientRef.current && newMsg.trim() !== '') {
+    const client = stompClientRef.current;
+    if (
+      client &&
+      client.connected && // ✅ ensure connection is established
+      newMsg.trim() !== ""
+    ) {
       const messagePayload = {
         roomId,
         content: newMsg.trim(),
         timestamp: new Date().toISOString(),
       };
 
-      stompClientRef.current.send(
-        '/app/message',
+      client.send(
+        "/app/message",
         { Authorization: `Bearer ${token}` },
         JSON.stringify(messagePayload)
       );
-      setNewMsg('');
+      setNewMsg("");
     }
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -71,11 +76,11 @@ export default function ChatBox({ roomId, token }) {
       <div className="flex-grow-1 d-flex flex-column bg-dark-custom p-3 text-white">
         <div
           className="flex-grow-1 overflow-auto mb-3"
-          style={{ maxHeight: 'calc(100vh - 200px)' }}
+          style={{ maxHeight: "calc(100vh - 200px)" }}
         >
           {messages.map((msg, idx) => (
             <div key={idx} className="mb-2">
-              <strong>{msg.sender || 'Anon'}:</strong> {msg.content}
+              <strong>{msg.sender || "Anon"}:</strong> {msg.content}
               <br />
               <small className="text-muted">
                 {new Date(msg.timestamp).toLocaleTimeString()}
@@ -91,7 +96,7 @@ export default function ChatBox({ roomId, token }) {
             onKeyDown={handleKeyDown}
             placeholder="Type a message..."
             rows={2}
-            style={{ resize: 'none' }}
+            style={{ resize: "none" }}
           />
           <button
             className="btn btn-crimson"
@@ -101,12 +106,6 @@ export default function ChatBox({ roomId, token }) {
             Send
           </button>
         </div>
-      </div>
-
-      {/* Participants sidebar */}
-      <div className="bg-black text-white p-3 border-start" style={{ width: '250px' }}>
-        <h6 className="text-crimson mb-3">Participants</h6>
-        <ParticipantsList roomId={roomId} token={token} />
       </div>
     </div>
   );
